@@ -1,8 +1,8 @@
 backend:
   # Local proxy for development:
   name: proxy
-  proxy_url: http://localhost:3001/api/v1
-  branch: macos-nodejs-14
+  proxy_url: http://localhost:8001/api/v1
+  branch: sm-demo
 
   commit_messages:
     create: 'Create {{collection}} “{{slug}}”'

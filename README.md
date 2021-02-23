@@ -1,7 +1,5 @@
 # Gatsby + Netlify CMS Starter
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/b654c94e-08a6-4b79-b443-7837581b1d8d/deploy-status)](https://app.netlify.com/sites/gatsby-starter-netlify-cms-ci/deploys)
-
 **Note:** This starter uses [Gatsby v2](https://www.gatsbyjs.org/blog/2018-09-17-gatsby-v2/).
 
 This repo contains an example business website that is built with [Gatsby](https://www.gatsbyjs.org/), and [Netlify CMS](https://www.netlifycms.org): **[Demo Link](https://gatsby-netlify-cms.netlify.com/)**.
@@ -26,95 +24,87 @@ It follows the [JAMstack architecture](https://jamstack.org) by using Git as a s
 
 ## Prerequisites
 
-- Node (I recommend using v8.2.0 or higher)
-- [Gatsby CLI](https://www.gatsbyjs.org/docs/)
-- [Netlify CLI](https://github.com/netlify/cli)
+- macOS or Linux development environment
+  - On Windows workstations, use Windows Subsystem for Linux 2 (WSL 2) - see section below for details.
+- NodeJS v14.6.0 or higher
+- NPM v7.5.6 or higher
+- Recommended: Environment management system such as Anaconda and/or NVM
 
-## Getting Started (Recommended)
+## Getting Started
 
-Netlify CMS can run in any frontend web environment, but the quickest way to try it out is by running it on a pre-configured starter site with Netlify. The example here is the Kaldi coffee company template (adapted from [One Click Hugo CMS](https://github.com/netlify-templates/one-click-hugo-cms)). Use the button below to build and deploy your own copy of the repository:
+Note: These instructions are different from the upstream version of this project because this project/branch is intended to run locally only.
 
-<a href="https://app.netlify.com/start/deploy?repository=https://github.com/netlify-templates/gatsby-starter-netlify-cms&amp;stack=cms"><img src="https://www.netlify.com/img/deploy/button.svg" alt="Deploy to Netlify"></a>
-
-After clicking that button, you’ll authenticate with GitHub and choose a repository name. Netlify will then automatically create a repository in your GitHub account with a copy of the files from the template. Next, it will build and deploy the new site on Netlify, bringing you to the site dashboard when the build is complete. Next, you’ll need to set up Netlify’s Identity service to authorize users to log in to the CMS.
-
-### Access Locally
-
-Pulldown a local copy of the Github repository Netlify created for you, with the name you specified in the previous step
 ```
-$ git clone https://github.com/[GITHUB_USERNAME]/[REPO_NAME].git
+$ git clone [GIT_REPOSITORY_URL]
 $ cd [REPO_NAME]
-$ yarn
-$ netlify dev # or ntl dev
+$ npm install
+$ npm start
 ```
 
-This uses the new [Netlify Dev](https://www.netlify.com/products/dev/?utm_source=blog&utm_medium=netlifycms&utm_campaign=devex) CLI feature to serve any functions you have in the `lambda` folder.
+The URLs to access the built website and the Netlify CMS UI are displayed on the console if everything starts up properly.
 
-To test the CMS locally, you'll need to run a production build of the site:
 
+### Test Build Process
+
+To test the static page build process:
 ```
-$ npm run build
-$ netlify dev # or ntl dev
-```
-
-### Media Libraries (installed, but optional)
-
-Media Libraries have been included in this starter as a default. If you are not planning to use `Uploadcare` or `Cloudinary` in your project, you **can** remove them from module import and registration in `src/cms/cms.js`. Here is an example of the lines to comment or remove them your project.
-
-```javascript
-import CMS from 'netlify-cms-app'
-// import uploadcare from 'netlify-cms-media-library-uploadcare'
-// import cloudinary from 'netlify-cms-media-library-cloudinary'
-
-import AboutPagePreview from './preview-templates/AboutPagePreview'
-import BlogPostPreview from './preview-templates/BlogPostPreview'
-import ProductPagePreview from './preview-templates/ProductPagePreview'
-import IndexPagePreview from './preview-templates/IndexPagePreview'
-
-// CMS.registerMediaLibrary(uploadcare);
-// CMS.registerMediaLibrary(cloudinary);
-
-CMS.registerPreviewTemplate('index', IndexPagePreview)
-CMS.registerPreviewTemplate('about', AboutPagePreview)
-CMS.registerPreviewTemplate('products', ProductPagePreview)
-CMS.registerPreviewTemplate('blog', BlogPostPreview)
-```
-
-Note: Don't forget to also remove them from `package.json` and `yarn.lock` / `package-lock.json` using `yarn` or `npm`. During the build netlify-cms-app will bundle the media libraries as well, having them removed will save you build time.
-Example:
-```
-yarn remove netlify-cms-media-library-uploadcare
-```
-OR
-```
-yarn remove netlify-cms-media-library-cloudinary
-```
-## Getting Started (Without Netlify)
-
-```
-$ gatsby new [SITE_DIRECTORY_NAME] https://github.com/netlify-templates/gatsby-starter-netlify-cms/
-$ cd [SITE_DIRECTORY_NAME]
 $ npm run build
 $ npm run serve
 ```
+Once again, the URL to access the built website will be displayed on the console if everything starts up properly.
 
-### Setting up the CMS
 
-Follow the [Netlify CMS Quick Start Guide](https://www.netlifycms.org/docs/quick-start/#authentication) to set up authentication, and hosting.
+## Windows Development Environment
 
-## Debugging
+This project will not work under Windows with native NodeJS installed.  Instead, install the NodeJS environment under Windows Subsystem for Linux 2 (WSL 2).  
 
-Windows users might encounter `node-gyp` errors when trying to npm install.
-To resolve, make sure that you have both Python 2.7 and the Visual C++ build environment installed.
+Reference documentation:
+*   [Windows Subsystem for Linux Installation Guide for Windows 10](https://docs.microsoft.com/en-us/windows/wsl/install-win10)
+*   [Set up your Node.js development environment with WSL 2](https://docs.microsoft.com/en-us/windows/nodejs/setup-on-wsl2).
 
+Important:  Make sure to verify that WSL 2 is in fact set on the Linux distribution installed by verifying with the `wsl --list --verbose` command.  For more information, refer to the first reference link above.
+
+
+## Known Issues and Workarounds
+
+### Dev server fails with "Callback was already called"
+
+The dev server start process would fail due to a "Callback was already called" error.  There doesn't seem to be a clear solution to the issue, but what fixed by:
+*   Switching to dart-sass from node-sass
+*   Use gatsby-plugin-netlify-cms v4.9.0 instead of using the latest version (v4.10.0 at the time of writing).
+
+These workarounds are already incorporated into the `package.json` and lock files committed in this project and branch.  Do not upgrade these packages unless this issue is resolved.
+
+
+### Fail to compile after publishing content via Netlify CMS
+
+In this sample Gatsby + Netlify CMS project, there is an issue when the development server is running (using `npm start` command) and an edit to the content is done within Netlify CMS.  Normally, the browser window viewing the rendered content page should refresh with the updated content upon publishing the change via Netlify CMS.  However, due to unknown root causes, that fails with a "failed to compile" error message similar to:
 ```
-npm config set python python2.7
-npm install --global --production windows-build-tools
+Failed to compile
+There was an error in your GraphQL query:
+
+      Field "full_image" must not have a selection since type "String" has no subfields.
+
+      This can happen if you e.g. accidentally added { } to the field "full_image". If you didn't expect "full_image" to be of type "String" make sure that your input source and/or plugin is correct.
+      However, if you expect "value" to exist, the field might be accessible in another subfield. Please try your query in GraphiQL and use the GraphiQL explorer to see which fields you can query and what shape they have.
+
+      It is recommended to explicitly type your GraphQL schema if you want to use optional fields. This way you don't have to add the mentioned
+      "dummy content". Visit our docs to learn how you can define the schema for "undefined":
+      https://www.gatsbyjs.org/docs/schema-customization/#creating-type-definitions
+
+File: /Users/martian111/Documents/SurgeMotion/websites/starter-upstream/src/templates/product-page.js
+This error occurred during the build time and cannot be dismissed.
 ```
 
-[Full details here](https://www.npmjs.com/package/node-gyp 'NPM node-gyp page')
+Workarounds:
+*   Make a whitespace edit (add a space, save, delete the space, save) in `gatsby-config.js` to trigger a refresh of the Gatsby development process.
+*   OR: Restart the Gatsby development server (`Ctrl-C` and then `npm start`)
 
-MacOS users might also encounter some errors, for more info check [node-gyp](https://github.com/nodejs/node-gyp). We recommend using the latest stable node version.
+References:
+*   This issue has been brought up to GatsbyJS team, but remains unsolved for this project/codebase as currently coded ([Issue 27862](https://github.com/gatsbyjs/gatsby/issues/27862)).
+*   Contrary to some reports, this problem does happen under macOS:  [Issue 13469](https://github.com/gatsbyjs/gatsby/issues/13469)
+*   Others:  [Issue 25307](https://github.com/gatsbyjs/gatsby/issues/25307)
+
 
 ## Purgecss
 
@@ -122,5 +112,5 @@ This plugin uses [gatsby-plugin-purgecss](https://www.gatsbyjs.org/packages/gats
 
 # CONTRIBUTING
 
-Contributions are always welcome, no matter how large or small. Before contributing,
-please read the [code of conduct](CODE_OF_CONDUCT.md).
+See original project at:
+https://github.com/netlify-templates/gatsby-starter-netlify-cms
